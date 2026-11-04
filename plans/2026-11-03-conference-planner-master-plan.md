@@ -195,7 +195,7 @@ The layout, typography and interactions follow the reference. Generic data repla
   - a sidebar agenda;
   - clicking jumps to the item in Program, clearing filters so it's visible.
   - Talks with no own time are nested under their session. Starred posters stay in poster picks; their session shows a picks count.
-- **URL hash** holds view, filters, search and selections, so a reload keeps your place.
+- **URL:** the view is the path (`/`, `/posters`, `/calendar`; switching views adds a history entry, so back works). Filters, search and selections are in the query string, so a reload or a shared link keeps your place. The Worker's single-page-app fallback serves `index.html` for those paths.
 - **Performance:** no virtualization or Web Worker needed. ASHG parse + validate + model takes about 115 ms in Node. Cards are memoized on their own star state. Search waits for two characters, and long presentation lists show 60 at a time.
 
 ## 4. Repo layout
@@ -203,11 +203,11 @@ The layout, typography and interactions follow the reference. Generic data repla
 ```
 schema/        conference.ts (zod schema + semantic checks)
 src/           App.tsx, styles.css (ported reference CSS), components/ (Shell, icons, Text, common), views/ (Start, Program, Posters, Calendar),
-               lib/ (model, schedule, time, load, cache, stars, hash)
+               lib/ (model, schedule, time, load, cache, stars, url)
 public/        AGENTS.md, demo.conference.json, conference.schema.json (generated)
 scripts/       generate-schema.ts, validate.ts, convert-ashg.ts, convert_cshl_abstract_book.py
 tests/         schema, time, model + calendar entries, load (gzip), IndexedDB cache + App flow, AGENTS.md, view rendering (happy-dom) incl. real files
-.github/       workflows/deploy.yml (GitHub Pages; runs only on push)
+.github/       workflows/ci.yml (tests + build on every push)
 local/         gitignored: real conference files and sources
 plans/
 ```
@@ -222,7 +222,7 @@ The first real use is CSHL Biological Data Science, which opens Wed Nov 4 at 7:3
 
 - **The source is the user's attendee program/abstract book**, saved into `local/cshl-data-2026/source/`. The conversion is a by-hand run of the `AGENTS.md` procedure: PDF → `local/cshl-data-2026.conference.json` → `check-jsonschema` → load in the app.
 - **The meeting is small** (a CSHL meeting is roughly 8–10 oral sessions plus 2–3 poster sessions), so gzip, virtualization and Web Worker parsing don't matter for this first target.
-- **Phone use at the meeting needs a deploy** (e.g. GitHub Pages from this repo), and that requires a push, which is the user's call. Before that, the app can be reached from a phone on the same network via the user's own `npm run dev -- --host`.
+- **Phone use at the meeting needs a deploy** (Cloudflare Worker, `*.workers.dev`), which is the user's call. Before that, the app can be reached from a phone on the same network via the user's own `npm run dev -- --host`.
 - DST ended Nov 1, 2026, so meeting times are all EST (UTC−5).
 
 Order for this week (it supersedes the general order below where they conflict):
@@ -276,7 +276,7 @@ No dev server or browser automation is run by the agent. The user checks the app
 
 ## Implementation log (2026-11-03 → 11-04)
 
-- **Built:** schema + semantic checks, loader (JSON/gzip), IndexedDB cache with a localStorage summary index, per-conference stars, URL-hash state, the three views, start screen, demo file, JSON Schema generation, CLI validator, GitHub Pages workflow and README.
+- **Built:** schema + semantic checks, loader (JSON/gzip), IndexedDB cache with a localStorage summary index, per-conference stars, URL state, the three views, start screen, demo file, JSON Schema generation, CLI validator, CI workflow and README.
 - **First UI didn't look like the reference:** it was an original Linear-ish design with a top tab bar and a timeline calendar. The user flagged it, and the UI was rebuilt on the reference's own CSS and markup: sidebar brand and view switch, serif day chips, cards with chevrons, poster rows, and the clustered calendar with a sidebar agenda. Quick Look snapshots of static renders were compared against the reference.
 - **CSHL Biological Data Science 2026:** `scripts/convert_cshl_abstract_book.py` (pdfplumber; uv inline script) turns the attendee abstract book into `local/cshl-data-2026/cshl-data-2026.conference.json` (+ `.gz`). It has 13 sessions and 207 presentations. All 204 abstract numbers are present once, and the presenter was found from underline rects for every entry. Cross-checked against the abstract pages: 203 of 204 presenters agree; #169 differs only by diacritics.
 - **ASHG scale test:** `scripts/convert-ashg.ts` produces 268 sessions and 3,207 presentations, 11 MB of JSON (3.5 MB gzipped). Parse + validate + model takes about 115 ms in Node.
@@ -295,7 +295,7 @@ No dev server or browser automation is run by the agent. The user checks the app
   - warnings for talks running past their session and for timezone abbreviations;
   - the CLI validator strips a BOM.
 
-  Not changed: `|` as the hash separator for multi-select values, since no data contains it.
+  Not changed: `|` as the separator for multi-select values in the URL, since no data contains it.
 - **AGENTS.md** was extended from the CSHL conversion with guidance on PDF structure, keynote titling, unlisted talks, line breaks vs paragraphs, affiliation numbering, no `24:00`, and spelling disagreements.
 - **Verification:** 47 tests pass (including full renders of the CSHL and ASHG files); `tsc -b` and `vite build` are clean; `check-jsonschema` and `scripts/validate.ts` pass on the demo, CSHL and ASHG files. Nothing has been committed or pushed.
 
@@ -304,7 +304,6 @@ No dev server or browser automation is run by the agent. The user checks the app
 - **Start screen:**
   - black "Try demo" / "Create a conference file" buttons;
   - the agent instructions moved into a modal that copies or downloads a self-contained `AGENTS.md` (guide + JSON Schema appended), so agents never need to reach the deployed site;
-  - `public/.nojekyll` for branch-based GitHub Pages deploys;
   - lucide icons (trash, close, door).
 - **Top bar:** "Exit" (lucide `DoorOpen`) replaces the session count. A "Suggested topics" switch appears only when the file has suggested categories.
 - **Suggested categories:**
@@ -314,6 +313,8 @@ No dev server or browser automation is run by the agent. The user checks the app
   - `scripts/export-items.ts` and `scripts/apply-suggestions.ts` move categories in and out of a conference file.
 - **Prompt tuning:** blind agents categorized ASHG abstracts with the real tracks hidden, across 10 prompt variants plus replicates on a second sample (`scripts/suggest-eval/README.md`). The winner (v8, 0.574 / 0.570) is quoted in `AGENTS.md`. Applied to CSHL: 13 topics over 207 presentations.
 - **Heading length:** `AGENTS.md` sets a 32-character guideline for the sidebar heading, with a matching warning in validation.
+- **Routing:** hash routing replaced by paths + query string (`src/lib/url.ts`), with an absolute Vite `base` and the Worker's single-page-app fallback.
+- **Hosting:** a Cloudflare Worker with static assets (`wrangler.jsonc`, `npm run deploy`, `*.workers.dev`), matching the user's other deploys, instead of GitHub Pages. `.github/workflows/ci.yml` runs only tests and the build, and `.node-version` pins Node 24.
 - **Layout fixes:**
   - removed the reference's custom WebKit scrollbar (it forced a classic scrollbar that left a gap beside the top bar);
   - wide-window section lines fade out where they end in open space;

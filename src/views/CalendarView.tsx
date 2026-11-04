@@ -20,9 +20,9 @@ const sessionPeople = (s: Session) => {
 };
 
 export function CalendarView(props: ViewProps) {
-  const { model, stars, hash, setHash } = props;
+  const { model, stars, url, setUrl } = props;
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const q = hash.q ?? '';
+  const q = url.q ?? '';
   const dq = useDeferredValue(q);
   const matcher = useMemo(() => makeMatcher(dq), [dq]);
 
@@ -34,9 +34,9 @@ export function CalendarView(props: ViewProps) {
 
   const goTo = (e: Entry, presId?: string) => {
     setSidebarOpen(false);
-    if (e.session.kind === 'posters' && !presId) return setHash({ view: 'posters', session: e.sessionStarred ? e.session.id : '__picks__', q: null });
+    if (e.session.kind === 'posters' && !presId) return setUrl({ view: 'posters', session: e.sessionStarred ? e.session.id : '__picks__', q: null });
     // Clear program filters so the target is guaranteed visible (reference `openSessionInProgram`).
-    setHash({
+    setUrl({
       view: null,
       open: e.session.id,
       pres: presId ?? e.presentation?.id ?? null,
@@ -109,11 +109,11 @@ export function CalendarView(props: ViewProps) {
     <Shell
       {...props}
       view="calendar"
-      onView={(v) => setHash({ view: v === 'program' ? null : v, q: null })}
+      onView={(v) => setUrl({ view: v === 'program' ? null : v, q: null })}
       sidebar={sidebar}
       daybar={daybar}
       q={q}
-      onQ={(v) => setHash({ q: v })}
+      onQ={(v) => setUrl({ q: v })}
       placeholder="Search sessions, speakers, abstracts…"
       sidebarOpen={sidebarOpen}
       setSidebarOpen={setSidebarOpen}

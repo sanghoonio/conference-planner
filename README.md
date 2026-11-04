@@ -24,13 +24,18 @@ npm run typecheck
 npm run build          # regenerates public/conference.schema.json, then builds dist/
 ```
 
-`dist/` is a plain static site with relative paths, so it can be hosted anywhere. Pushing to `main` on GitHub deploys it with `.github/workflows/deploy.yml` (enable Pages → Source: GitHub Actions in the repo settings). The deploy serves `AGENTS.md`, `conference.schema.json` and the demo file alongside the app.
+`dist/` is a static site. Views are real paths (`/`, `/posters`, `/calendar`) with search and filters in the query string, so the host must serve `index.html` for unknown paths. It's deployed as a **Cloudflare Worker with static assets** (`wrangler.jsonc`, no Worker script), whose `not_found_handling: "single-page-application"` does exactly that:
+
+- **From this machine:** `npm run deploy` builds and runs `wrangler deploy`. Run `npx wrangler login` once first. The site is at `https://conference-planner.<your-subdomain>.workers.dev`.
+- **From GitHub (deploys on every push):** Cloudflare dashboard → Workers & Pages → Create → Import a repository → this repo. Set the build command to `npm run build` and the deploy command to `npx wrangler deploy`. Cloudflare reads the Node version from `.node-version`.
+
+The deploy serves `AGENTS.md`, `conference.schema.json` and the demo file alongside the app. `.github/workflows/ci.yml` runs the tests and build on every push.
 
 ## Conference files
 
 - `schema/conference.ts`: the format, as a Zod schema plus the semantic checks (unique IDs, end ≥ start, declared facets, valid timezone). It is the single source of truth.
 - `public/conference.schema.json`: generated JSON Schema (`npm run schema`).
-- `public/AGENTS.md`: instructions for a coding agent that produces a conference file from a program website, API or PDF. "Add your conference" on the start screen copies it, with the JSON Schema appended, as one self-contained block to paste to an agent, so the agent never needs to reach the deployed site. It lives in `public/`, not the repo root, so that agents working *on this repo* don't mistake it for repo instructions.
+- `public/AGENTS.md`: instructions for a coding agent that produces a conference file from a program website, API or PDF. "Create a conference file" on the start screen copies it, with the JSON Schema appended, as one self-contained block to paste to an agent, so the agent never needs to reach the deployed site. It lives in `public/`, not the repo root, so that agents working *on this repo* don't mistake it for repo instructions.
 - `npm run validate -- <file>`: the same checks the app runs, from the command line.
 
 Converters kept here:

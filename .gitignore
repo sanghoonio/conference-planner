@@ -6,3 +6,4 @@ local/
 .vite/
 tsconfig.tsbuildinfo
 __pycache__/
+.wrangler/

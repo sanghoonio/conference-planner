@@ -1,4 +1,4 @@
-import type { HashState } from '../lib/hash.ts';
+import type { UrlPatch, UrlState } from '../lib/url.ts';
 import type { Model, Presentation } from '../lib/model.ts';
 import type { Stars } from '../lib/stars.ts';
 import { Check } from './icons.tsx';
@@ -6,8 +6,8 @@ import { Check } from './icons.tsx';
 export type ViewProps = {
   model: Model;
   stars: Stars;
-  hash: HashState;
-  setHash: (patch: Record<string, string | null | undefined>) => void;
+  url: UrlState;
+  setUrl: (patch: UrlPatch) => void;
   onClose: () => void;
   suggested: SuggestedToggle;
 };

@@ -16,18 +16,18 @@ export function typeLabel(model: Model, s: Session) {
 }
 
 export function ProgramView(props: ViewProps) {
-  const { model, stars, hash, setHash } = props;
+  const { model, stars, url, setUrl } = props;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // Per-card open/closed choices; anything not in here follows expand-all / auto-open rules.
-  const [overrides, setOverrides] = useState<Map<string, boolean>>(() => new Map(hash.open ? [[hash.open, true]] : []));
+  const [overrides, setOverrides] = useState<Map<string, boolean>>(() => new Map(url.open ? [[url.open, true]] : []));
   const [expandAll, setExpandAll] = useState(false);
-  const q = hash.q ?? '';
+  const q = url.q ?? '';
   const dq = useDeferredValue(q);
-  const days = splitSet(hash.day);
-  const kinds = splitSet(hash.kind);
-  const rooms = splitSet(hash.room);
-  const starredOnly = hash.starred === '1';
-  const facetSel = Object.fromEntries(model.facets.map((f) => [f.key, splitSet(hash[`f_${f.key}`])]));
+  const days = splitSet(url.day);
+  const kinds = splitSet(url.kind);
+  const rooms = splitSet(url.room);
+  const starredOnly = url.starred === '1';
+  const facetSel = Object.fromEntries(model.facets.map((f) => [f.key, splitSet(url[`f_${f.key}`])]));
   const hasTypeFacet = model.facets.some((f) => f.key === 'type');
 
   // Union of session-level and presentation-level facet values, per session.
@@ -95,19 +95,19 @@ export function ProgramView(props: ViewProps) {
 
   // Jump from the calendar: open the card, scroll to it, flash it (and the talk, if one was targeted).
   useEffect(() => {
-    if (!hash.open) return;
-    setOverrides((o) => new Map(o).set(hash.open!, true));
+    if (!url.open) return;
+    setOverrides((o) => new Map(o).set(url.open!, true));
     const t = setTimeout(() => {
-      const card = document.querySelector(`.card[data-id="${CSS.escape(hash.open!)}"]`);
-      const pres = hash.pres ? card?.querySelector(`.pres[data-id="${CSS.escape(hash.pres)}"]`) : null;
+      const card = document.querySelector(`.card[data-id="${CSS.escape(url.open!)}"]`);
+      const pres = url.pres ? card?.querySelector(`.pres[data-id="${CSS.escape(url.pres)}"]`) : null;
       flashEl(pres ?? card ?? null, pres ? 'center' : 'start');
     }, 40);
     return () => clearTimeout(t);
-  }, [hash.open, hash.pres]);
+  }, [url.open, url.pres]);
 
   const anyFilter = !!(days.size || kinds.size || rooms.size || starredOnly || q || Object.values(facetSel).some((s) => s.size));
   const clearAll = () =>
-    setHash({ day: null, kind: null, room: null, starred: null, q: null, ...Object.fromEntries(model.facets.map((f) => [`f_${f.key}`, null])) });
+    setUrl({ day: null, kind: null, room: null, starred: null, q: null, ...Object.fromEntries(model.facets.map((f) => [`f_${f.key}`, null])) });
 
   const byDay = new Map<string, Session[]>();
   for (const s of visible) (byDay.get(s.day) ?? byDay.set(s.day, []).get(s.day)!).push(s);
@@ -127,15 +127,15 @@ export function ProgramView(props: ViewProps) {
         </button>
       </div>
       <div className="side-sec">
-        <Opt className="star-opt" label="My Schedule" count={scheduleCount(model, stars.stars)} on={starredOnly} onClick={() => setHash({ starred: starredOnly ? null : '1' })} />
+        <Opt className="star-opt" label="My Schedule" count={scheduleCount(model, stars.stars)} on={starredOnly} onClick={() => setUrl({ starred: starredOnly ? null : '1' })} />
       </div>
       {model.kinds.length > 1 && !hasTypeFacet && (
         <SideGroup
           title="Session type"
           options={model.kinds.map((k) => ({ value: k, label: KIND_LABELS[k], count: kindCounts.get(k) ?? 0 }))}
           selected={kinds}
-          onToggle={(v) => setHash({ kind: joinSet(toggled(kinds, v)) })}
-          onClear={() => setHash({ kind: null })}
+          onToggle={(v) => setUrl({ kind: joinSet(toggled(kinds, v)) })}
+          onClear={() => setUrl({ kind: null })}
         />
       )}
       {model.facets.map((f) => {
@@ -149,8 +149,8 @@ export function ProgramView(props: ViewProps) {
             options={[...all].sort().map((v) => ({ value: v, label: v, count: counts.get(v) ?? 0 }))}
             selected={facetSel[f.key]}
             suggested={f.suggested}
-            onToggle={(v) => setHash({ [`f_${f.key}`]: joinSet(toggled(facetSel[f.key], v)) })}
-            onClear={() => setHash({ [`f_${f.key}`]: null })}
+            onToggle={(v) => setUrl({ [`f_${f.key}`]: joinSet(toggled(facetSel[f.key], v)) })}
+            onClear={() => setUrl({ [`f_${f.key}`]: null })}
           />
         );
       })}
@@ -159,8 +159,8 @@ export function ProgramView(props: ViewProps) {
           title="Room"
           options={model.rooms.map((r) => ({ value: r, label: r, count: roomCounts.get(r) ?? 0 }))}
           selected={rooms}
-          onToggle={(v) => setHash({ room: joinSet(toggled(rooms, v)) })}
-          onClear={() => setHash({ room: null })}
+          onToggle={(v) => setUrl({ room: joinSet(toggled(rooms, v)) })}
+          onClear={() => setUrl({ room: null })}
         />
       )}
     </>
@@ -175,7 +175,7 @@ export function ProgramView(props: ViewProps) {
             key={d}
             className={`chip${days.has(d) ? ' on' : ''}${c === 0 && !days.has(d) ? ' zero' : ''}`}
             title={dayLabel(d)}
-            onClick={() => setHash({ day: joinSet(toggled(days, d)) })}
+            onClick={() => setUrl({ day: joinSet(toggled(days, d)) })}
           >
             <span className="dw">{weekdayShort(d)}</span>
             <span className="dn">{dayNumber(d)}</span>
@@ -187,7 +187,7 @@ export function ProgramView(props: ViewProps) {
         {nextUp && (
           <button
             onClick={() => {
-              if (days.size && !days.has(nextUp.day)) setHash({ day: null });
+              if (days.size && !days.has(nextUp.day)) setUrl({ day: null });
               setTimeout(() => flashEl(document.querySelector(`.card[data-id="${CSS.escape(nextUp.id)}"]`), 'start'), 40);
             }}
           >
@@ -220,11 +220,11 @@ export function ProgramView(props: ViewProps) {
     <Shell
       {...props}
       view="program"
-      onView={(v) => setHash({ view: v === 'program' ? null : v, q: null, open: null, pres: null })}
+      onView={(v) => setUrl({ view: v === 'program' ? null : v, q: null, open: null, pres: null })}
       sidebar={sidebar}
       daybar={daybar}
       q={q}
-      onQ={(v) => setHash({ q: v })}
+      onQ={(v) => setUrl({ q: v })}
       placeholder="Search sessions, speakers, abstracts…"
       sidebarOpen={sidebarOpen}
       setSidebarOpen={setSidebarOpen}

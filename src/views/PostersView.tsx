@@ -16,7 +16,7 @@ const shortPoster = (t: string) => t.replace(/^\s*Posters?\s+(?=Session)/i, '').
 const boardOf = (p: Presentation) => p.board ?? p.code ?? '';
 
 export function PostersView(props: ViewProps) {
-  const { model, stars, hash, setHash } = props;
+  const { model, stars, url, setUrl } = props;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openIds, setOpenIds] = useState<Set<string>>(new Set());
   const [limit, setLimit] = useState(PAGE);
@@ -27,16 +27,16 @@ export function PostersView(props: ViewProps) {
   // The facet used for chips and "By <facet>" grouping: the first declared facet posters actually use.
   const facet = model.facets.find((f) => allPosters.some((p) => p.facets[f.key]?.length));
 
-  const sel = hash.session && (hash.session === PICKS || model.sessionById.has(hash.session)) ? hash.session : (posterSessions[0]?.id ?? PICKS);
+  const sel = url.session && (url.session === PICKS || model.sessionById.has(url.session)) ? url.session : (posterSessions[0]?.id ?? PICKS);
   const isPicks = sel === PICKS;
   const session = model.sessionById.get(sel);
-  const q = hash.q ?? '';
+  const q = url.q ?? '';
   const dq = useDeferredValue(q);
   const isSearchAll = !isPicks && !!dq.trim(); // a query searches every poster, across sessions
   // Like the reference (which opens "By track"), group by category when there is one.
   const defaultSort: Sort = facet ? 'facet' : hasNumbers ? 'number' : 'az';
-  const sort: Sort = (['number', 'facet', 'az', 'pres'] as const).includes(hash.sort as Sort) ? (hash.sort as Sort) : defaultSort;
-  const chipSel = splitSet(hash.ptrack);
+  const sort: Sort = (['number', 'facet', 'az', 'pres'] as const).includes(url.sort as Sort) ? (url.sort as Sort) : defaultSort;
+  const chipSel = splitSet(url.ptrack);
 
   const matcher = useMemo(() => makeMatcher(dq), [dq]);
   const picks = allPosters.filter((p) => stars.stars.has(p.id));
@@ -56,7 +56,7 @@ export function PostersView(props: ViewProps) {
   const choose = (id: string) => {
     setSidebarOpen(false);
     setLimit(PAGE);
-    setHash({ session: id, q: null, ptrack: null });
+    setUrl({ session: id, q: null, ptrack: null });
   };
 
   // ---------- groups to render ----------
@@ -128,7 +128,7 @@ export function PostersView(props: ViewProps) {
         <div className="ptracks">
           {chipValues.length > 1 &&
             chipValues.map((v) => (
-              <button key={v} className={`chip${chipSel.has(v) ? ' on' : ''}${facet?.suggested ? ' sugg' : ''}`} onClick={() => setHash({ ptrack: joinSet(toggled(chipSel, v)) })}>
+              <button key={v} className={`chip${chipSel.has(v) ? ' on' : ''}${facet?.suggested ? ' sugg' : ''}`} onClick={() => setUrl({ ptrack: joinSet(toggled(chipSel, v)) })}>
                 {v}
                 <span className="c">{chipCounts.get(v)}</span>
               </button>
@@ -137,19 +137,19 @@ export function PostersView(props: ViewProps) {
         {!isPicks && !isSearchAll && (
           <div className="seg pseg">
             {facet && (
-              <button className={sort === 'facet' ? 'on' : ''} onClick={() => setHash({ sort: 'facet' })}>
+              <button className={sort === 'facet' ? 'on' : ''} onClick={() => setUrl({ sort: 'facet' })}>
                 By {facet.label.toLowerCase()}
               </button>
             )}
             {hasNumbers && (
-              <button className={sort === 'number' ? 'on' : ''} onClick={() => setHash({ sort: 'number' })}>
+              <button className={sort === 'number' ? 'on' : ''} onClick={() => setUrl({ sort: 'number' })}>
                 By number
               </button>
             )}
-            <button className={sort === 'az' ? 'on' : ''} onClick={() => setHash({ sort: 'az' })}>
+            <button className={sort === 'az' ? 'on' : ''} onClick={() => setUrl({ sort: 'az' })}>
               A–Z
             </button>
-            <button className={sort === 'pres' ? 'on' : ''} onClick={() => setHash({ sort: 'pres' })}>
+            <button className={sort === 'pres' ? 'on' : ''} onClick={() => setUrl({ sort: 'pres' })}>
               Presenter
             </button>
           </div>
@@ -191,13 +191,13 @@ export function PostersView(props: ViewProps) {
     <Shell
       {...props}
       view="posters"
-      onView={(v) => setHash({ view: v === 'program' ? null : v, q: null, ptrack: null })}
+      onView={(v) => setUrl({ view: v === 'program' ? null : v, q: null, ptrack: null })}
       sidebar={sidebar}
       daybar={daybar}
       q={q}
       onQ={(v) => {
         setLimit(PAGE);
-        setHash({ q: v });
+        setUrl({ q: v });
       }}
       placeholder={isPicks ? 'Search my poster picks…' : 'Search all posters…'}
       sidebarOpen={sidebarOpen}

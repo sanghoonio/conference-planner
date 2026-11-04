@@ -85,6 +85,20 @@ describe('App', () => {
 });
 
 describe('Start screen', () => {
+  it('sends deep links to the root when no conference is open', async () => {
+    localStorage.clear();
+    history.replaceState(null, '', '/posters?q=genome');
+    const el = document.createElement('div');
+    document.body.appendChild(el);
+    const root = createRoot(el);
+    await act(async () => root.render(<App />));
+    await flush();
+    expect(el.textContent).toMatch(/Drop a conference file here/);
+    expect(location.pathname + location.search).toBe('/');
+    act(() => root.unmount());
+    el.remove();
+  });
+
   it('opens the agent instructions in a modal and closes it with Escape', async () => {
     localStorage.clear();
     const el = document.createElement('div');
