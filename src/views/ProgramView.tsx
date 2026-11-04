@@ -245,21 +245,21 @@ export function ProgramView(props: ViewProps) {
           </div>
           {list.map((s, i) => {
             const newBlock = i === 0 || s.start !== list[i - 1].start;
-            return [
-              i > 0 && newBlock ? <div key={`${s.id}-div`} className="timedivider" /> : null,
+            return (
               <Card
                 key={s.id}
                 model={model}
                 s={s}
                 showTime={newBlock}
+                blockStart={i > 0 && newBlock}
                 open={isOpen(s)}
                 onSetOpen={setCardOpen}
                 stars={stars}
                 starSig={starSignature(s, stars.stars)}
                 matchIds={matchInfo.get(s.id)}
                 query={dq}
-              />,
-            ];
+              />
+            );
           })}
         </div>
       ))}
@@ -275,6 +275,8 @@ type CardProps = {
   model: Model;
   s: Session;
   showTime: boolean;
+  /** First card of a new start time (not the first of the day): its top border is the darker time divider. */
+  blockStart: boolean;
   open: boolean;
   onSetOpen: (id: string, open: boolean) => void;
   stars: ViewProps['stars'];
@@ -291,10 +293,10 @@ function starSignature(s: Session, stars: Set<string>) {
 }
 
 const Card = memo(CardImpl, (a, b) =>
-  a.s === b.s && a.open === b.open && a.showTime === b.showTime && a.starSig === b.starSig && a.matchIds === b.matchIds && a.query === b.query && a.model === b.model,
+  a.s === b.s && a.open === b.open && a.showTime === b.showTime && a.blockStart === b.blockStart && a.starSig === b.starSig && a.matchIds === b.matchIds && a.query === b.query && a.model === b.model,
 );
 
-function CardImpl({ model, s, showTime, open, onSetOpen, stars, matchIds, query }: CardProps) {
+function CardImpl({ model, s, showTime, blockStart, open, onSetOpen, stars, matchIds, query }: CardProps) {
   const nStar = s.presentations.filter((p) => stars.stars.has(p.id)).length;
   const dur = formatDuration(s.start, s.end);
   const meta = joinSep([
@@ -325,7 +327,7 @@ function CardImpl({ model, s, showTime, open, onSetOpen, stars, matchIds, query 
   ]);
 
   return (
-    <div className={`card${open ? ' open' : ''}`} data-id={s.id}>
+    <div className={`card${open ? ' open' : ''}${blockStart ? ' block-start' : ''}`} data-id={s.id}>
       <div className="card-row js-toggle" onClick={() => onSetOpen(s.id, !open)}>
         <div className="time">{showTime && <span className="t1">{formatTime(s.start)}</span>}</div>
         <div className="body">

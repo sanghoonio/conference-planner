@@ -103,8 +103,8 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .daygroup-h{position:sticky;top:var(--top);z-index:10;display:flex;align-items:baseline;gap:12px;padding:14px 12px 12px;background:var(--bg)}
 .daygroup-h .d{font-family:var(--serif);font-weight:800;font-size:27px;line-height:1.1;letter-spacing:-.025em}
 .daygroup-h .n{font-size:12.5px;color:var(--text-3)}
-.timedivider{height:0;border-top:1px solid var(--border-2);margin-top:22px}
-.timedivider + .card{border-top-color:transparent}
+/* A new start time: the card's own top border is the darker divider (one line, no separate element). */
+.card.block-start{border-top-color:var(--border-2)}
 
 .card{border-top:1px solid var(--border);background:transparent;scroll-margin-top:calc(var(--top) + 64px);transition:background .12s}
 .card:hover{background:var(--bg-1)}
@@ -366,15 +366,13 @@ button{font-family:inherit;cursor:pointer;color:inherit}
   .posters-view .daybar{border-image:none}
   .ptoolbar{border-image:linear-gradient(to right,var(--border) calc(100% - 180px),transparent) 1}
   .card,.poster{border-image:linear-gradient(to right,var(--border) calc(100% - 140px),transparent) 1}
-  .timedivider{border-image:linear-gradient(to right,var(--border-2) calc(100% - 140px),transparent) 1}
-  .timedivider + .card{border-image:none;border-top-color:transparent}
+  .card.block-start{border-image:linear-gradient(to right,var(--border-2) calc(100% - 140px),transparent) 1}
   .posters-view .list > div:first-child > .poster:first-child{border-image:none;border-top-color:transparent}
 }
 @media (min-width:1329px){
   .cal-cluster{border-image:linear-gradient(to right,var(--border) calc(100% - 140px),transparent) 1}
 }
 
-/* The gap before a time divider belongs to the card above it, so that card's hover/open background
-   reaches the divider line (the reference used a margin on the divider, which no hover covers). */
-.timedivider{margin-top:0}
-.card:has(+ .timedivider){padding-bottom:22px}
+/* The gap before a new start time belongs to the card above it, so that card's hover/open background
+   reaches the divider line (the reference used a margin on a separate divider, which no hover covers). */
+.card:has(+ .card.block-start){padding-bottom:22px}

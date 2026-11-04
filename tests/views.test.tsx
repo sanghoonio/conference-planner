@@ -60,6 +60,11 @@ describe('Program view', () => {
     expect($$('.card')).toHaveLength(demo.sessions.length);
     expect(titles('.daygroup-h .d')).toEqual(['Saturday, 27 March', 'Sunday, 28 March']);
     expect(titles('.daybar .chip .dn')).toEqual(['27', '28']);
+    // A new start time is marked by the card's own (darker) top border, never a separate divider line.
+    expect($$('.timedivider')).toHaveLength(0);
+    const sat = $$('.daygroup')[0];
+    const starts = [...sat.querySelectorAll('.card')].map((c) => c.classList.contains('block-start'));
+    expect(starts).toEqual([false, true, true, false, true, true, true, true]); // s1 and s2 share 10:45
     expect(container.querySelector('.brand h1')?.textContent).toBe('Demo 2027');
     expect(container.querySelector('.topbar .switch-conf')?.textContent).toBe('Exit');
   });
