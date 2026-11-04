@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import type { Model } from '../lib/model.ts';
 import { formatShortRange } from '../lib/time.ts';
-import { DoorOpen } from 'lucide-react';
+import { DoorOpen, SquareArrowOutUpRight } from 'lucide-react';
 import type { SuggestedToggle } from './common.tsx';
 import { MenuIcon, SearchIcon } from './icons.tsx';
 
@@ -69,11 +69,17 @@ export function Shell(p: Props) {
           </button>
         </div>
         <div>{p.sidebar}</div>
-        {m.url && (
+        {/* On phones the top bar has no room, so the toggle and Exit move here (CSS shows/hides each copy). */}
+        {(m.url || p.suggested.available) && (
           <div className="side-foot">
-            <a href={m.url} target="_blank" rel="noreferrer">
-              Official site
-            </a>
+            {p.suggested.available && <SuggestToggle s={p.suggested} className="mobile-only" />}
+            {m.url && (
+              <a className="bar-link" href={m.url} target="_blank" rel="noreferrer">
+                <SquareArrowOutUpRight size={14} strokeWidth={1.8} aria-hidden="true" />
+                <span>Official site</span>
+              </a>
+            )}
+            <ExitButton onClose={p.onClose} className="mobile-only" />
           </div>
         )}
       </aside>
@@ -97,28 +103,38 @@ export function Shell(p: Props) {
             />
             <span className="kbd">/</span>
           </div>
-          {p.suggested.available && (
-            <button
-              className={`suggest-toggle${p.suggested.show ? ' on' : ''}`}
-              role="switch"
-              aria-checked={p.suggested.show}
-              title="Show topics suggested from the abstracts by AI, not by the organizers"
-              onClick={p.suggested.toggle}
-            >
-              <span className="suggest-track">
-                <span className="suggest-thumb" />
-              </span>
-              <span>Suggested topics</span>
-            </button>
-          )}
-          <button className="switch-conf" onClick={p.onClose} title="Exit to your conferences">
-            <DoorOpen size={14} strokeWidth={1.8} aria-hidden="true" />
-            <span>Exit</span>
-          </button>
+          {p.suggested.available && <SuggestToggle s={p.suggested} className="desktop-only" />}
+          <ExitButton onClose={p.onClose} className="desktop-only" />
         </div>
         <div className="daybar">{p.daybar}</div>
         <div className="list">{p.children}</div>
       </div>
     </div>
+  );
+}
+
+function SuggestToggle({ s, className }: { s: SuggestedToggle; className: string }) {
+  return (
+    <button
+      className={`bar-link suggest-toggle ${className}${s.show ? ' on' : ''}`}
+      role="switch"
+      aria-checked={s.show}
+      title="Show topics suggested from the abstracts by AI, not by the organizers"
+      onClick={s.toggle}
+    >
+      <span className="suggest-track">
+        <span className="suggest-thumb" />
+      </span>
+      <span>Suggested topics</span>
+    </button>
+  );
+}
+
+function ExitButton({ onClose, className }: { onClose: () => void; className: string }) {
+  return (
+    <button className={`bar-link switch-conf ${className}`} onClick={onClose} title="Exit to your conferences">
+      <DoorOpen size={14} strokeWidth={1.8} aria-hidden="true" />
+      <span>Exit</span>
+    </button>
   );
 }

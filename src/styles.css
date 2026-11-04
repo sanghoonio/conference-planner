@@ -167,7 +167,14 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .phead-title{font-family:var(--serif);font-weight:800;font-size:30px;line-height:1.08;letter-spacing:-.025em;color:var(--text);max-width:30ch;text-wrap:balance}
 .phead-meta{font-size:12.5px;color:var(--text-3);margin-top:8px}
 .ptoolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 32px 14px;border-bottom:1px solid var(--border)}
-.ptracks{display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0}
+/* Chips get the full row; the sort control sits below them as tabs whose active underline lands on the
+   toolbar's bottom border (like the day tabs in Program). */
+.ptracks{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 100%;min-width:0}
+.ptracks:empty{display:none}
+.ptoolbar{padding-bottom:0}
+.ptoolbar .seg.pseg{margin-left:0;gap:18px;flex-wrap:nowrap;padding-bottom:0}
+.ptoolbar .seg.pseg button{padding:4px 0 10px;text-decoration:none;box-shadow:inset 0 -2px 0 transparent;transition:color .12s,box-shadow .12s}
+.ptoolbar .seg.pseg button.on{text-decoration:none;color:var(--text);box-shadow:inset 0 -2px 0 var(--text)}
 .ptracks .chip{flex-direction:row;gap:6px;padding:3px 11px;border:1px solid var(--border);border-radius:999px;box-shadow:none;font-size:12px;color:var(--text-2);background:var(--bg)}
 .ptracks .chip:hover{border-color:var(--border-2);color:var(--text)}
 .ptracks .chip .c{font-size:11px;min-height:0}
@@ -256,12 +263,22 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 /* ======================================================================
    Additions for Conference Planner (not in the reference)
    ====================================================================== */
-.switch-conf{margin-left:auto;display:inline-flex;align-items:center;gap:6px;background:none;border:none;padding:6px 8px;margin-right:-8px;border-radius:7px;color:var(--text-3);font-size:12.5px;white-space:nowrap}
-.switch-conf:hover{color:var(--text);background:var(--bg-2)}
-@media (max-width:860px){.switch-conf{padding:8px 6px}}
-.side-foot{display:flex;flex-wrap:wrap;gap:14px;padding:22px 22px 0;margin-top:10px;border-top:1px solid var(--border);font-size:12px}
-.side-foot a,.side-foot button{color:var(--text-3);background:none;border:none;padding:0;font-size:12px}
-.side-foot a:hover,.side-foot button:hover{color:var(--text);text-decoration:none}
+.topbar .switch-conf{margin-left:auto;margin-right:-8px}
+/* Quiet text-and-icon links: top bar (Suggested topics, Exit) and sidebar footer (Official site, plus both on phones). */
+.bar-link{display:inline-flex;align-items:center;gap:6px;background:none;border:none;padding:6px 8px;border-radius:7px;color:var(--text-3);font-size:12.5px;white-space:nowrap;text-decoration:none}
+.bar-link:hover{color:var(--text);background:var(--bg-2);text-decoration:none}
+.side-foot{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:12px 12px 0;margin-top:10px;border-top:1px solid var(--border)}
+/* Footer rows use the sidebar option rhythm (.opt: 5px 10px padding, 13px text, 10px icon gap, no gap between rows). */
+.side-foot .bar-link{padding:5px 10px;gap:10px;font-size:13px;line-height:1.5;border-radius:6px}
+/* desktop: hide the footer when it would only hold phone-only links */
+.side-foot:not(:has(> :not(.mobile-only))){display:none}
+.mobile-only{display:none!important}
+@media (max-width:860px){
+  .mobile-only{display:inline-flex!important}
+  .desktop-only{display:none!important}
+  .side-foot:not(:has(> :not(.mobile-only))){display:flex}
+
+}
 .subheat{display:flex;align-items:baseline;gap:10px}
 .subheat-all{background:none;border:none;padding:0;font-size:11px;letter-spacing:0;text-transform:none;font-weight:400;color:var(--text-2);text-decoration:underline;text-decoration-color:var(--border-2);text-underline-offset:3px}
 .subheat-all:hover{color:var(--text)}
@@ -323,7 +340,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 @media (max-width:860px){
   .search input{font-size:16px}
   .sidebar{height:100dvh}
-  .seg.pseg{display:inline-flex;margin-left:0;flex-wrap:wrap;gap:10px 14px}
+  .seg.pseg{display:inline-flex}
   .star{position:relative}
   .star::after{content:"";position:absolute;inset:-8px}
   .card-side .star{padding:9px}
@@ -347,15 +364,14 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .ptracks .chip.sugg:hover{color:var(--sugg)}
 .ptracks .chip.sugg.on{background:var(--sugg);border-color:var(--sugg);color:#fff}
 .pgroup-h .d.sugg{color:var(--sugg)}
-.suggest-toggle{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:none;border:none;padding:6px 8px;border-radius:7px;color:var(--text-3);font-size:12.5px;white-space:nowrap}
-.suggest-toggle:hover{background:var(--bg-2);color:var(--text)}
+.suggest-toggle{gap:7px}
+.topbar .suggest-toggle{margin-left:auto}
 .suggest-toggle.on{color:var(--sugg)}
 .suggest-track{width:24px;height:14px;border-radius:999px;background:var(--border-2);position:relative;transition:background .15s;flex:none}
 .suggest-thumb{position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
 .suggest-toggle.on .suggest-track{background:var(--sugg)}
 .suggest-toggle.on .suggest-thumb{transform:translateX(10px)}
-.suggest-toggle + .switch-conf{margin-left:2px}
-@media (max-width:860px){.suggest-toggle{padding:8px 4px}}
+.topbar .suggest-toggle + .switch-conf{margin-left:-10px} /* cancels most of the top bar's 16px gap */
 
 /* ---------- lines that end in open space fade out ----------
    The reading column is capped (1000px; calendar 1080px). Once the window is wide enough that the column
