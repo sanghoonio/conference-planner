@@ -1,0 +1,9 @@
+Design the track list that this meeting's abstract submission form would have offered, then pick tracks as the authors would have.
+
+1. Read every presentation (title and abstract).
+2. Write the submission form's track dropdown: 10–13 tracks. Authors choose their own tracks when submitting, so each track must be broad enough that most authors in that area pick it confidently, named in the field's standard vocabulary, and recognisable at a glance. A good list is mostly approach tracks (the kind of work: computational, statistical, functional/experimental, machine learning, clinical translation and implementation, population and public health, ethics and policy…), plus a few application tracks.
+   - Application tracks follow how the field itself divides its subject, at the coarsest level it uses (for example broad classes of disease or organism), not by organ system, specialty or individual condition. Work on a specific condition goes under its broad class and its approach track.
+   - Most fields have a broad translational track (bringing findings into practice) and a population-level health track. Include them when the program has that work: authors use them as second choices.
+   - Avoid narrow tracks for a single technology, assay or molecular layer: authors doing that work would pick the broad track instead.
+3. For each presentation, choose the tracks its authors would most likely have ticked: the one that describes the work best, plus others that clearly also apply (a method paper about a disease ticks both). Authors tend to tick more than one when they can: aim for about 1.5–2 tracks per presentation on average, never more than four.
+4. Check the result: count presentations per track. A track under 4% is too narrow (merge it into the broad track its authors would otherwise pick); a track over a third is probably two tracks. Revise once if needed.

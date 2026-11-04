@@ -1,0 +1,702 @@
+{
+  "$schema": "./conference.schema.json",
+  "format": "conference-planner/v1",
+  "conference": {
+    "id": "demo-symposium-2027",
+    "name": "Demo Symposium 2027",
+    "shortName": "Demo 2027",
+    "timezone": "Europe/Berlin",
+    "start": "2027-03-27",
+    "end": "2027-03-28",
+    "location": "Example Conference Centre (fictional)",
+    "url": null,
+    "description": "A small fictional conference used to demonstrate Conference Planner. Clocks in Europe/Berlin move forward on the night of 27–28 March 2027.",
+    "source": {
+      "description": "Hand-made demo data",
+      "retrieved": "2026-11-03"
+    }
+  },
+  "facets": [
+    {
+      "key": "track",
+      "label": "Track"
+    },
+    {
+      "key": "format",
+      "label": "Format"
+    },
+    {
+      "key": "topic",
+      "label": "Topic",
+      "source": "suggested"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "registration",
+      "title": "Registration and coffee",
+      "kind": "break",
+      "start": "2027-03-27T08:30",
+      "end": "2027-03-27T09:15",
+      "rooms": [
+        "Foyer"
+      ]
+    },
+    {
+      "id": "keynote-1",
+      "title": "Opening keynote",
+      "kind": "keynote",
+      "start": "2027-03-27T09:15",
+      "end": "2027-03-27T10:15",
+      "rooms": [
+        "Main Hall"
+      ],
+      "facets": {
+        "format": [
+          "Plenary"
+        ]
+      },
+      "presentations": [
+        {
+          "id": "d1",
+          "code": "1",
+          "title": "What should a genome model know?",
+          "speakers": [
+            {
+              "name": "Ada Keynoter",
+              "affiliation": "Institute of Examples"
+            }
+          ],
+          "authors": "Ada Keynoter, Example Coauthor",
+          "abstract": "We present what should a genome model know?. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner."
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "code": "Session 1",
+      "title": "Machine Learning for Regulatory Genomics",
+      "kind": "talks",
+      "start": "2027-03-27T10:45",
+      "end": "2027-03-27T12:15",
+      "rooms": [
+        "Main Hall"
+      ],
+      "chairs": [
+        {
+          "name": "Chair One",
+          "affiliation": "North University"
+        },
+        {
+          "name": "Chair Two",
+          "affiliation": "Coastal Institute"
+        }
+      ],
+      "facets": {
+        "track": [
+          "Machine Learning"
+        ],
+        "format": [
+          "Talks"
+        ]
+      },
+      "description": "Sequence-to-function models, their evaluation, and their failure modes.",
+      "presentations": [
+        {
+          "id": "d2",
+          "code": "2",
+          "title": "Benchmarks that cannot be solved by gene lookup",
+          "speakers": [
+            {
+              "name": "Bea Benchmark",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Bea Benchmark, Example Coauthor",
+          "abstract": "We present benchmarks that cannot be solved by gene lookup. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "start": "2027-03-27T10:45",
+          "end": "2027-03-27T11:05",
+          "facets": {
+            "topic": [
+              "Benchmarking & evaluation"
+            ]
+          }
+        },
+        {
+          "id": "d3",
+          "code": "3",
+          "title": "Conditioning sequence models on cell state",
+          "speakers": [
+            {
+              "name": "Cy Context",
+              "affiliation": "Coastal Institute"
+            }
+          ],
+          "authors": "Cy Context, Example Coauthor",
+          "abstract": "We present conditioning sequence models on cell state. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "start": "2027-03-27T11:05",
+          "end": "2027-03-27T11:25",
+          "facets": {
+            "topic": [
+              "Sequence models",
+              "Single-cell"
+            ]
+          }
+        },
+        {
+          "id": "d4",
+          "code": "4",
+          "title": "Uncertainty for variant effect scores",
+          "speakers": [
+            {
+              "name": "Di Uncertain",
+              "affiliation": "Valley Research Center"
+            }
+          ],
+          "authors": "Di Uncertain, Example Coauthor",
+          "abstract": "We present uncertainty for variant effect scores. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "start": "2027-03-27T11:25",
+          "end": "2027-03-27T11:45",
+          "facets": {
+            "topic": [
+              "Variant interpretation"
+            ]
+          }
+        },
+        {
+          "id": "d5",
+          "code": "5",
+          "title": "Distilling large models for small labs",
+          "speakers": [
+            {
+              "name": "Ed Distill",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Ed Distill, Example Coauthor",
+          "abstract": "We present distilling large models for small labs. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "start": "2027-03-27T11:45",
+          "end": "2027-03-27T12:05",
+          "facets": {
+            "topic": [
+              "Sequence models"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "code": "Session 2",
+      "title": "Population Genetics",
+      "kind": "talks",
+      "start": "2027-03-27T10:45",
+      "end": "2027-03-27T12:15",
+      "rooms": [
+        "Room B"
+      ],
+      "chairs": [
+        {
+          "name": "Chair Three",
+          "affiliation": "Valley Research Center"
+        }
+      ],
+      "facets": {
+        "track": [
+          "Population Genetics"
+        ],
+        "format": [
+          "Talks"
+        ]
+      },
+      "description": "A parallel session, so starring talks here and in Session 1 shows overlaps in My schedule.",
+      "presentations": [
+        {
+          "id": "d6",
+          "code": "6",
+          "title": "Admixture timing from long haplotypes",
+          "speakers": [
+            {
+              "name": "Fay Founder",
+              "affiliation": "Coastal Institute"
+            }
+          ],
+          "authors": "Fay Founder, Example Coauthor",
+          "abstract": "We present admixture timing from long haplotypes. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "start": "2027-03-27T10:45",
+          "end": "2027-03-27T11:15",
+          "facets": {
+            "topic": [
+              "Human evolution"
+            ]
+          }
+        },
+        {
+          "id": "d7",
+          "code": "7",
+          "title": "Portable polygenic scores",
+          "speakers": [
+            {
+              "name": "Gil Portable",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Gil Portable, Example Coauthor",
+          "abstract": "We present portable polygenic scores. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "start": "2027-03-27T11:15",
+          "end": "2027-03-27T11:45",
+          "facets": {
+            "topic": [
+              "Variant interpretation"
+            ]
+          }
+        },
+        {
+          "id": "d8",
+          "code": "8",
+          "title": "Mutation rate heterogeneity across families",
+          "speakers": [
+            {
+              "name": "Hal Rate",
+              "affiliation": "Valley Research Center"
+            }
+          ],
+          "authors": "Hal Rate, Example Coauthor",
+          "abstract": "We present mutation rate heterogeneity across families. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "start": "2027-03-27T11:45",
+          "end": "2027-03-27T12:15",
+          "facets": {
+            "topic": [
+              "Human evolution"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "lunch-1",
+      "title": "Lunch",
+      "kind": "break",
+      "start": "2027-03-27T12:15",
+      "end": "2027-03-27T13:30",
+      "rooms": [
+        "Dining Hall"
+      ]
+    },
+    {
+      "id": "w1",
+      "title": "Workshop: Building reproducible pipelines",
+      "kind": "workshop",
+      "start": "2027-03-27T13:30",
+      "end": "2027-03-27T15:30",
+      "rooms": [
+        "Lab 1"
+      ],
+      "facets": {
+        "track": [
+          "Tools & Infrastructure"
+        ],
+        "format": [
+          "Workshop"
+        ]
+      },
+      "description": "Hands-on. Bring a laptop.\n\nMaterials: https://example.org/workshop"
+    },
+    {
+      "id": "posters-1",
+      "title": "Poster Session",
+      "kind": "posters",
+      "start": "2027-03-27T16:00",
+      "end": "2027-03-27T18:00",
+      "rooms": [
+        "Poster Hall"
+      ],
+      "facets": {
+        "format": [
+          "Posters"
+        ]
+      },
+      "presentations": [
+        {
+          "id": "poster-1",
+          "code": "P1",
+          "board": "101",
+          "title": "A benchmark of cell-type deconvolution methods across tissues",
+          "speakers": [
+            {
+              "name": "Poster Presenter 1",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Poster Presenter 1, Example Coauthor",
+          "abstract": "We present a benchmark of cell-type deconvolution methods across tissues. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Single-cell & Spatial"
+            ],
+            "topic": [
+              "Benchmarking & evaluation",
+              "Single-cell"
+            ]
+          }
+        },
+        {
+          "id": "poster-2",
+          "code": "P2",
+          "board": "102",
+          "title": "Variant effect prediction for non-coding regions with sequence models",
+          "speakers": [
+            {
+              "name": "Poster Presenter 2",
+              "affiliation": "Coastal Institute"
+            }
+          ],
+          "authors": "Poster Presenter 2, Example Coauthor",
+          "abstract": "We present variant effect prediction for non-coding regions with sequence models. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Machine Learning"
+            ],
+            "topic": [
+              "Sequence models",
+              "Variant interpretation"
+            ]
+          }
+        },
+        {
+          "id": "poster-3",
+          "code": "P3",
+          "board": "103",
+          "title": "Fast approximate pangenome graph indexing",
+          "speakers": [
+            {
+              "name": "Poster Presenter 3",
+              "affiliation": "Valley Research Center"
+            }
+          ],
+          "authors": "Poster Presenter 3, Example Coauthor",
+          "abstract": "We present fast approximate pangenome graph indexing. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Algorithms"
+            ],
+            "topic": [
+              "Sequence search"
+            ]
+          }
+        },
+        {
+          "id": "poster-4",
+          "code": "P4",
+          "board": "104",
+          "title": "Spatial niche detection in multiplexed imaging",
+          "speakers": [
+            {
+              "name": "Poster Presenter 4",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Poster Presenter 4, Example Coauthor",
+          "abstract": "We present spatial niche detection in multiplexed imaging. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Single-cell & Spatial"
+            ],
+            "topic": [
+              "Single-cell"
+            ]
+          }
+        },
+        {
+          "id": "poster-5",
+          "code": "P5",
+          "board": "105",
+          "title": "Calibrating polygenic scores across ancestries",
+          "speakers": [
+            {
+              "name": "Poster Presenter 5",
+              "affiliation": "Coastal Institute"
+            }
+          ],
+          "authors": "Poster Presenter 5, Example Coauthor",
+          "abstract": "We present calibrating polygenic scores across ancestries. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Population Genetics"
+            ],
+            "topic": [
+              "Variant interpretation"
+            ]
+          }
+        },
+        {
+          "id": "poster-6",
+          "code": "P6",
+          "board": "106",
+          "title": "Interpretable attention maps for chromatin accessibility",
+          "speakers": [
+            {
+              "name": "Poster Presenter 6",
+              "affiliation": "Valley Research Center"
+            }
+          ],
+          "authors": "Poster Presenter 6, Example Coauthor",
+          "abstract": "We present interpretable attention maps for chromatin accessibility. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Machine Learning"
+            ],
+            "topic": [
+              "Sequence models"
+            ]
+          }
+        },
+        {
+          "id": "poster-7",
+          "code": "P7",
+          "board": "107",
+          "title": "Long-read isoform quantification at scale",
+          "speakers": [
+            {
+              "name": "Poster Presenter 7",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Poster Presenter 7, Example Coauthor",
+          "abstract": "We present long-read isoform quantification at scale. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Algorithms"
+            ],
+            "topic": [
+              "Sequence search"
+            ]
+          }
+        },
+        {
+          "id": "poster-8",
+          "code": "P8",
+          "board": "108",
+          "title": "Selection scans in ancient DNA time series",
+          "speakers": [
+            {
+              "name": "Poster Presenter 8",
+              "affiliation": "Coastal Institute"
+            }
+          ],
+          "authors": "Poster Presenter 8, Example Coauthor",
+          "abstract": "We present selection scans in ancient dna time series. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Population Genetics"
+            ],
+            "topic": [
+              "Human evolution"
+            ]
+          }
+        },
+        {
+          "id": "poster-9",
+          "code": "P9",
+          "board": "109",
+          "title": "Reproducible workflows for teaching genomics",
+          "speakers": [
+            {
+              "name": "Poster Presenter 9",
+              "affiliation": "Valley Research Center"
+            }
+          ],
+          "authors": "Poster Presenter 9, Example Coauthor",
+          "abstract": "We present reproducible workflows for teaching genomics. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Tools & Infrastructure"
+            ]
+          }
+        },
+        {
+          "id": "poster-10",
+          "code": "P10",
+          "board": "110",
+          "title": "Compressed k-mer sketches for metagenome search",
+          "speakers": [
+            {
+              "name": "Poster Presenter 10",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Poster Presenter 10, Example Coauthor",
+          "abstract": "We present compressed k-mer sketches for metagenome search. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Algorithms"
+            ]
+          }
+        },
+        {
+          "id": "poster-11",
+          "code": "P11",
+          "board": "111",
+          "title": "Federated analysis of hospital biobanks",
+          "speakers": [
+            {
+              "name": "Poster Presenter 11",
+              "affiliation": "Coastal Institute"
+            }
+          ],
+          "authors": "Poster Presenter 11, Example Coauthor",
+          "abstract": "We present federated analysis of hospital biobanks. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Tools & Infrastructure"
+            ]
+          }
+        },
+        {
+          "id": "poster-12",
+          "code": "P12",
+          "board": "112",
+          "title": "Gene regulatory network inference from perturbation screens",
+          "speakers": [
+            {
+              "name": "Poster Presenter 12",
+              "affiliation": "Valley Research Center"
+            }
+          ],
+          "authors": "Poster Presenter 12, Example Coauthor",
+          "abstract": "We present gene regulatory network inference from perturbation screens. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "track": [
+              "Machine Learning"
+            ],
+            "topic": [
+              "Single-cell"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "dinner",
+      "title": "Conference dinner",
+      "kind": "social",
+      "start": "2027-03-27T19:30",
+      "rooms": [
+        "Riverside Restaurant"
+      ],
+      "description": "No end time given in the program."
+    },
+    {
+      "id": "s3",
+      "code": "Session 3",
+      "title": "Algorithms and Data Structures",
+      "kind": "talks",
+      "start": "2027-03-28T09:30",
+      "end": "2027-03-28T11:30",
+      "rooms": [
+        "Main Hall"
+      ],
+      "chairs": [
+        {
+          "name": "Chair Four",
+          "affiliation": "Institute of Examples"
+        }
+      ],
+      "facets": {
+        "track": [
+          "Algorithms"
+        ],
+        "format": [
+          "Talks"
+        ]
+      },
+      "description": "Talks in this session have no individual times; they inherit the session time.",
+      "presentations": [
+        {
+          "id": "d9",
+          "code": "9",
+          "title": "Sketching every public metagenome",
+          "speakers": [
+            {
+              "name": "Ivy Sketch",
+              "affiliation": "North University"
+            }
+          ],
+          "authors": "Ivy Sketch, Example Coauthor",
+          "abstract": "We present sketching every public metagenome. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "topic": [
+              "Sequence search"
+            ]
+          }
+        },
+        {
+          "id": "d10",
+          "code": "10",
+          "title": "Graph indexes for pangenomes",
+          "speakers": [
+            {
+              "name": "Jo Graph",
+              "affiliation": "Coastal Institute"
+            }
+          ],
+          "authors": "Jo Graph, Example Coauthor",
+          "abstract": "We present graph indexes for pangenomes. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "topic": [
+              "Sequence search"
+            ]
+          }
+        },
+        {
+          "id": "d11",
+          "code": "11",
+          "title": "Minimizers, revisited",
+          "speakers": [
+            {
+              "name": "Kai Minimizer",
+              "affiliation": "Valley Research Center"
+            }
+          ],
+          "authors": "Kai Minimizer, Example Coauthor",
+          "abstract": "We present minimizers, revisited. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner.",
+          "facets": {
+            "topic": [
+              "Sequence search"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "keynote-2",
+      "title": "Closing keynote",
+      "kind": "keynote",
+      "start": "2027-03-28T11:45",
+      "end": "2027-03-28T12:45",
+      "rooms": [
+        "Main Hall"
+      ],
+      "facets": {
+        "format": [
+          "Plenary"
+        ]
+      },
+      "presentations": [
+        {
+          "id": "d12",
+          "code": "12",
+          "title": "Twenty years of sequencing, and the next twenty",
+          "speakers": [
+            {
+              "name": "Lu Closing",
+              "affiliation": "Institute of Examples"
+            }
+          ],
+          "authors": "Lu Closing, Example Coauthor",
+          "abstract": "We present twenty years of sequencing, and the next twenty. Using simulated and public data, we compare the approach against standard baselines and characterize where it helps and where it does not.\n\nThis is a fictional abstract in the demo conference file shipped with Conference Planner."
+        }
+      ]
+    }
+  ]
+}

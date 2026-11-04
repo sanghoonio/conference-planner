@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conference.schema.json",
+  "title": "Conference file (conference-planner/v1)",
+  "description": "A complete scientific conference program for Conference Planner. All times are local wall-clock \"YYYY-MM-DDTHH:mm\" in conference.timezone. See AGENTS.md.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "format": {
+      "type": "string",
+      "const": "conference-planner/v1"
+    },
+    "conference": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "description": "Stable slug. Stars are stored under it, so never change it between versions of one conference."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shortName": {
+          "description": "Short display name for the sidebar, e.g. \"ASHG 2026\". Defaults to `name`.",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1,
+          "description": "IANA timezone, e.g. \"America/New_York\". All times in the file are local to it."
+        },
+        "start": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "end": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "retrieved": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "timezone"
+      ],
+      "additionalProperties": false
+    },
+    "facets": {
+      "description": "Filterable dimensions, in display order.",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[a-z0-9_-]+$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source": {
+                "description": "\"organizer\" (default): the conference's own categories. \"suggested\": inferred by an agent from titles and abstracts; the planner styles these differently and lets the user hide them.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "organizer",
+                      "suggested"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "key",
+              "label"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sessions": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Unique across the whole file and stable across regenerations."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "talks",
+              "posters",
+              "keynote",
+              "plenary",
+              "workshop",
+              "social",
+              "break",
+              "other"
+            ]
+          },
+          "start": {
+            "type": "string",
+            "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])T(?:[01]\\d|2[0-3]):[0-5]\\d$",
+            "description": "Local wall-clock time in conference.timezone, \"YYYY-MM-DDTHH:mm\"."
+          },
+          "end": {
+            "description": "Omit only if the program gives no end time.",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])T(?:[01]\\d|2[0-3]):[0-5]\\d$",
+                "description": "Local wall-clock time in conference.timezone, \"YYYY-MM-DDTHH:mm\"."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rooms": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "chairs": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "affiliation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "additionalProperties": false,
+                  "description": "A person. `affiliation` is free text as printed."
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "description": "Plain text; a blank line separates paragraphs.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "code": {
+            "description": "Session number/code as printed, e.g. \"Session 3\".",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "facets": {
+            "anyOf": [
+              {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "description": "Map of facet key (declared in top-level `facets`) to display-label values."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "presentations": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Unique across the whole file and stable across regenerations."
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "start": {
+                      "description": "Omit to inherit the session start.",
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])T(?:[01]\\d|2[0-3]):[0-5]\\d$",
+                          "description": "Local wall-clock time in conference.timezone, \"YYYY-MM-DDTHH:mm\"."
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "end": {
+                      "description": "Omit to inherit the session end.",
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])T(?:[01]\\d|2[0-3]):[0-5]\\d$",
+                          "description": "Local wall-clock time in conference.timezone, \"YYYY-MM-DDTHH:mm\"."
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "speakers": {
+                      "description": "Presenting author(s) / speaker(s).",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "affiliation": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false,
+                            "description": "A person. `affiliation` is free text as printed."
+                          }
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "authors": {
+                      "description": "Full author line as printed, e.g. \"A. Smith, B. Jones\".",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "affiliations": {
+                      "description": "Full affiliation text as printed.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "abstract": {
+                      "description": "Plain text; a blank line separates paragraphs.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "code": {
+                      "description": "Abstract / program number as printed, e.g. \"42\" or \"PgmNr 1234\".",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "board": {
+                      "description": "Poster board number, if different from `code`.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "rooms": {
+                      "description": "Only if different from the session rooms.",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "facets": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "description": "Map of facet key (declared in top-level `facets`) to display-label values."
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "start"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "format",
+    "conference",
+    "sessions"
+  ],
+  "additionalProperties": false
+}
